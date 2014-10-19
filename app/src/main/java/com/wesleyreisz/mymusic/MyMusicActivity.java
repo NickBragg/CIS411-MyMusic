@@ -1,9 +1,17 @@
 package com.wesleyreisz.mymusic;
 
 import android.app.Activity;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ListView;
+
+import com.wesleyreisz.mymusic.model.Song;
+import com.wesleyreisz.mymusic.service.MockMusicService;
+
+import java.util.List;
 
 
 public class MyMusicActivity extends Activity {
@@ -12,6 +20,21 @@ public class MyMusicActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my_music);
+
+        ListView listView = (ListView) findViewById(R.id.ListViewMusic);
+
+        List<Song> songs = new MockMusicService().findAll();
+
+        SongAdapter songAdapter = new SongAdapter(this,R.layout.activity_my_music,songs);
+
+        listView.setAdapter(songAdapter);
+
+        fragment_MusicList musicList = new fragment_MusicList();
+        FragmentManager manager = getFragmentManager();
+        FragmentTransaction transaction = manager.beginTransaction();
+        transaction.add(R.id.music_activity, musicList,"listFragment");
+        transaction.commit();
+
     }
 
 
